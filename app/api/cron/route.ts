@@ -4,8 +4,6 @@ import { getNotifications } from "@/lib/tiktok";
 
 const prisma = new PrismaClient();
 
-export const maxDuration = 300;
-
 export async function GET() {
   try {
     const webhooks = await prisma.webhook.findMany();
