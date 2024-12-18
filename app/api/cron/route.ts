@@ -1,36 +1,57 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { getNotifications } from "@/lib/tiktok";
 
 const prisma = new PrismaClient();
 
+export const maxDuration = 300;
+
 export async function GET() {
   try {
-    const notifications = await prisma.notification.findMany();
+    const webhooks = await prisma.webhook.findMany();
 
-    for (const notification of notifications) {
-      const { sessionId, endpoint } = notification;
+    await Promise.all(
+      webhooks.map(async (webhook) => {
+        const notifications = await getNotifications({
+          sessionId: webhook.sessionId,
+        });
 
-      // Fetch data from external API using sessionId
-      const externalApiResponse = await fetch(
-        `https://api.example.com/data?sessionId=${sessionId}`
-      );
-      const externalData = await externalApiResponse.json();
+        const lastEventIndex = notifications.findIndex((n) => {
+          return n.event_id === webhook.lastEventId;
+        });
 
-      // Send data to the stored endpoint
-      await fetch(endpoint, {
-        method: "'POST'",
-        headers: {
-          "'Content-Type'": "'application/json'",
-        },
-        body: JSON.stringify(externalData),
-      });
-    }
+        const nextNotifications = notifications.filter((_, index) => {
+          return lastEventIndex === -1 ? false : index < lastEventIndex;
+        });
+
+        await Promise.all(
+          nextNotifications.map(async (notification) => {
+            await fetch(webhook.endpoint, {
+              method: "POST",
+              body: JSON.stringify(notification),
+            });
+          })
+        );
+
+        const lastEventId = nextNotifications[0]?.event_id;
+        if (lastEventId) {
+          await prisma.webhook.update({
+            where: {
+              id: webhook.id,
+            },
+            data: {
+              lastEventId,
+            },
+          });
+        }
+      })
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("'Error in cron job:'", error);
+    console.error("Error in cron job:", error);
     return NextResponse.json(
-      { error: "'Internal Server Error'" },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }
