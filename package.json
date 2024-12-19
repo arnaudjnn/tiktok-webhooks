@@ -3,30 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate:dev": "npx dotenv -e .env.local -- prisma migrate dev",
-    "migrate:deploy": "npx dotenv -e .env.local -- prisma migrate deploy",
-    "migrate:status": "npx dotenv -e .env.local -- prisma migrate status",
-    "generate": "npx dotenv -e .env.local -- prisma generate"
+    "migrate:dev": "dotenv -e .env.local -- npx prisma migrate dev",
+    "migrate:deploy": "dotenv -e .env.local -- npx prisma migrate deploy",
+    "migrate:status": "dotenv -e .env.local -- npx prisma status",
+    "generate": "dotenv -e .env.local -- npx prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^4.14.0",
-    "@vercel/postgres": "^0.3.0",
-    "next": "13.4.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@prisma/client": "^6.1.0",
+    "dotenv-cli": "^7.4.4",
+    "next": "15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/node": "20.1.4",
-    "@types/react": "18.2.6",
-    "@types/react-dom": "18.2.4",
-    "eslint": "8.40.0",
-    "eslint-config-next": "13.4.2",
-    "prisma": "^4.14.0",
-    "typescript": "5.0.4"
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.1",
+    "typescript": "^5"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
