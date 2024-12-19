@@ -11,7 +11,7 @@ export async function GET() {
     const webhooks = await prisma.webhook.findMany();
 
     await Promise.all(
-      webhooks.map(async (webhook: any) => {
+      webhooks.map(async (webhook) => {
         const notifications = await getNotifications({
           sessionId: webhook.sessionId,
         });
