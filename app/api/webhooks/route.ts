@@ -1,14 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { headers as getHeaders } from "next/headers";
 
 const prisma = new PrismaClient();
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const headers = await getHeaders();
-  const apiKey = headers.get("x-api-key");
+  const apiKey = headers.get("X-RapidAPI-Proxy-Secret");
 
-  if (apiKey !== process.env.API_SECRET) {
+  if (apiKey !== process.env.RAPIDAPI_PROXY_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
