@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate:dev": "dotenv -e .env.local -- npx prisma migrate dev",
-    "migrate:deploy": "dotenv -e .env.local -- npx prisma migrate deploy",
-    "migrate:status": "dotenv -e .env.local -- npx prisma status",
-    "generate": "dotenv -e .env.local -- npx prisma generate",
+    "migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
+    "migrate:deploy": "dotenv -e .env.local -- prisma migrate deploy",
+    "migrate:status": "dotenv -e .env.local -- prisma status",
+    "generate": "dotenv -e .env.local -- prisma generate",
     "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
@@ -27,6 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.1",
+    "prisma": "4.16.2",
     "typescript": "^5"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
